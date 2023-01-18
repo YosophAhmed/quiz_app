@@ -32,16 +32,16 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: PageView.builder(
-         controller: pageController,
-          itemCount: QuestionsData.questions.length,
-          itemBuilder: (context, index) {
-            return QuestionContainer(
-              questionsNumber: QuestionsData.questions.length,
-              questionIndex: index,
-              controller: pageController,
-            );
-          },
-      ),
+        controller: pageController,
+        itemCount: QuestionsData.questions.length,
+        itemBuilder: (context, index) {
+          return QuestionContainer(
+            questionsNumber: QuestionsData.questions.length,
+            questionIndex: index,
+            controller: pageController,
+          );
+        },
+      )
     );
   }
 }

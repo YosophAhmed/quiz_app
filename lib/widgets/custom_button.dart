@@ -26,7 +26,7 @@ class CustomButton extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          // color: AppCubit.get(context).isSelected ? Colors.amberAccent : color,
+          color: color,
           borderRadius: BorderRadius.circular(8.sp),
         ),
         alignment: Alignment.center,

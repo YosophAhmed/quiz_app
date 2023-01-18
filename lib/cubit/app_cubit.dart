@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiz/constants/colors.dart';
 
 import 'app_states.dart';
 
@@ -7,10 +9,20 @@ class AppCubit extends Cubit<AppState> {
 
   static AppCubit get(context) => BlocProvider.of(context);
 
-  bool isSelected = false;
+  Color trueColor = AppColors.color['trueAnswerColor']!;
+  Color falseColor = AppColors.color['falseAnswerColor']!;
 
-  void selectButton() {
-    isSelected = !isSelected;
-    emit(SelectButtonState());
+  bool isPressed = false;
+  bool isTrue = false;
+
+  void emitState() {
+    if (isPressed == true) {
+      emit(NoSelectState());
+      if (isTrue == true) {
+        emit(SelectTrueAnswerState());
+      } else {
+        emit(SelectFalseAnswerState());
+      }
+    }
   }
 }
