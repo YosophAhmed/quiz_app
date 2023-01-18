@@ -14,6 +14,7 @@ class QuizApp extends StatelessWidget {
           theme: ThemeData(
             brightness: Brightness.dark,
             primarySwatch: Colors.grey,
+            fontFamily: 'Poppins',
           ),
           initialRoute: HomePage.routeName,
           routes: {
