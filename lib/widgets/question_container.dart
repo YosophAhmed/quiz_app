@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/constants/colors.dart';
-import 'package:quiz/cubit/app_cubit.dart';
 import 'package:quiz/data/questions_data.dart';
-import 'package:quiz/widgets/custom_button.dart';
 import 'package:quiz/widgets/custom_divider.dart';
 import 'package:sizer/sizer.dart';
 
-class QuestionContainer extends StatelessWidget {
+class QuestionContainer extends StatefulWidget {
   final int questionsNumber;
   final int questionIndex;
   final PageController controller;
@@ -19,7 +17,14 @@ class QuestionContainer extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<QuestionContainer> createState() => _QuestionContainerState();
+}
+
+class _QuestionContainerState extends State<QuestionContainer> {
+  @override
   Widget build(BuildContext context) {
+    bool isTrue = false;
+    bool isSelected = false;
     return Padding(
       padding: EdgeInsets.only(
         top: 4.h,
@@ -29,7 +34,7 @@ class QuestionContainer extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Question ${questionIndex + 1}/$questionsNumber',
+            'Question ${widget.questionIndex + 1}/${widget.questionsNumber}',
             style: TextStyle(
               fontSize: 24.sp,
               fontWeight: FontWeight.bold,
@@ -42,7 +47,7 @@ class QuestionContainer extends StatelessWidget {
             thickness: 4.0,
           ),
           Text(
-            QuestionsData.questions[questionIndex].question,
+            QuestionsData.questions[widget.questionIndex].question,
             style: TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.bold,
@@ -53,20 +58,45 @@ class QuestionContainer extends StatelessWidget {
             height: 5.h,
           ),
           for (int i = 0;
-          i < QuestionsData.questions[questionIndex].answer.length;
-          i++)
+              i < QuestionsData.questions[widget.questionIndex].answer.length;
+              i++)
             Padding(
               padding: EdgeInsets.symmetric(
                 vertical: 1.h,
               ),
-              child: CustomButton(
+              child: GestureDetector(
                 onTap: () {
-
+                  isSelected = true;
+                  if (QuestionsData.questions[widget.questionIndex].answer.entries
+                      .toList()[i]
+                      .value) {
+                    setState(() {
+                      isTrue = true;
+                    });
+                  }
                 },
-                label: QuestionsData.questions[questionIndex].answer.keys
-                    .toList()[i],
-                color: AppColors.color['secondColor']!,
-                height: 45,
+                child: Container(
+                  width: double.infinity,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? isTrue
+                            ? AppColors.color['trueAnswerColor']
+                            : AppColors.color['falseAnswerColor']
+                        : AppColors.color['FourthColor'],
+                    borderRadius: BorderRadius.circular(8.sp),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    QuestionsData.questions[widget.questionIndex].answer.keys
+                        .toList()[i],
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
               ),
             ),
           SizedBox(
@@ -74,7 +104,7 @@ class QuestionContainer extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              controller.nextPage(
+              widget.controller.nextPage(
                 duration: const Duration(milliseconds: 100),
                 curve: Curves.linear,
               );
@@ -93,3 +123,17 @@ class QuestionContainer extends StatelessWidget {
     );
   }
 }
+
+// CustomButton(
+// onTap: () {
+// if (QuestionsData.questions[questionIndex].answer.entries
+//     .toList()[i]
+//     .value) {
+//
+// }
+// },
+// label: QuestionsData.questions[questionIndex].answer.keys
+//     .toList()[i],
+// color: AppColors.color['secondColor']!,
+// height: 45,
+// ),

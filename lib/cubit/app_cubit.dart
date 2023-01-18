@@ -9,8 +9,7 @@ class AppCubit extends Cubit<AppState> {
 
   static AppCubit get(context) => BlocProvider.of(context);
 
-  Color trueColor = AppColors.color['trueAnswerColor']!;
-  Color falseColor = AppColors.color['falseAnswerColor']!;
+
 
   bool isPressed = false;
   bool isTrue = false;

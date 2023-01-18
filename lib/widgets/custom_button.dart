@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class CustomButton extends StatelessWidget {
+import '../constants/colors.dart';
+
+class CustomButton extends StatefulWidget {
   final String label;
   final VoidCallback onTap;
   final double width;
@@ -9,7 +11,12 @@ class CustomButton extends StatelessWidget {
   final bool isLoading;
   final Color color;
 
-  const CustomButton({
+  final Color trueColor = AppColors.color['trueAnswerColor']!;
+  final Color falseColor = AppColors.color['falseAnswerColor']!;
+
+  bool isTrue = false;
+
+  CustomButton({
     Key? key,
     required this.label,
     required this.onTap,
@@ -18,20 +25,26 @@ class CustomButton extends StatelessWidget {
     this.isLoading = false,
     this.color = Colors.red,
   }) : super(key: key);
+
+  @override
+  State<CustomButton> createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
-        width: width,
-        height: height,
+        width: widget.width,
+        height: widget.height,
         decoration: BoxDecoration(
-          color: color,
+          color: widget.color,
           borderRadius: BorderRadius.circular(8.sp),
         ),
         alignment: Alignment.center,
         child: Text(
-          label,
+          widget.label,
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
