@@ -153,5 +153,9 @@ class QuestionsData {
     ),
   ];
 
-  
+  static int result = 0;
+
+  static void countResult(int point) {
+    result += point;
+  }
 }

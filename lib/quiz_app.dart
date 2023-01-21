@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/pages/home_page.dart';
+import 'package:quiz/pages/result_page.dart';
 import 'package:sizer/sizer.dart';
 
 class QuizApp extends StatelessWidget {
@@ -19,6 +20,7 @@ class QuizApp extends StatelessWidget {
           initialRoute: HomePage.routeName,
           routes: {
             HomePage.routeName: (context) => const HomePage(),
+            ResultPage.routeName: (context) => const ResultPage(),
           },
         );
       },

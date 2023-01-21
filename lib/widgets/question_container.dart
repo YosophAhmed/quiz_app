@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/constants/colors.dart';
 import 'package:quiz/data/questions_data.dart';
+import 'package:quiz/pages/result_page.dart';
 import 'package:quiz/widgets/custom_divider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -9,7 +10,8 @@ class QuestionContainer extends StatefulWidget {
   final int questionIndex;
   final PageController controller;
 
-  const QuestionContainer({
+
+  QuestionContainer({
     Key? key,
     required this.questionsNumber,
     required this.questionIndex,
@@ -21,15 +23,19 @@ class QuestionContainer extends StatefulWidget {
 }
 
 class _QuestionContainerState extends State<QuestionContainer> {
+  bool isPressed = false;
+  Color trueAnswer = AppColors.color['trueAnswerColor']!;
+  Color wrongAnswer = AppColors.color['falseAnswerColor']!;
+  Color bottonColor = AppColors.color['fourthColor']!;
+
   @override
   Widget build(BuildContext context) {
-    bool isTrue = false;
-    bool isSelected = false;
     return Padding(
       padding: EdgeInsets.only(
         top: 4.h,
         left: 4.w,
         right: 4.w,
+        bottom: 1.h,
       ),
       child: Column(
         children: [
@@ -55,7 +61,7 @@ class _QuestionContainerState extends State<QuestionContainer> {
             ),
           ),
           SizedBox(
-            height: 5.h,
+            height: 4.h,
           ),
           for (int i = 0;
               i < QuestionsData.questions[widget.questionIndex].answer.length;
@@ -65,25 +71,38 @@ class _QuestionContainerState extends State<QuestionContainer> {
                 vertical: 1.h,
               ),
               child: GestureDetector(
-                onTap: () {
-                  isSelected = true;
-                  if (QuestionsData.questions[widget.questionIndex].answer.entries
-                      .toList()[i]
-                      .value) {
-                    setState(() {
-                      isTrue = true;
-                    });
-                  }
-                },
+                onTap: isPressed
+                    ? () {}
+                    : () {
+                        setState(() {
+                          isPressed = true;
+                        });
+                        if (QuestionsData
+                            .questions[widget.questionIndex].answer.entries
+                            .toList()[i]
+                            .value) {
+                          QuestionsData.countResult(10);
+                          setState(() {
+                            bottonColor = trueAnswer;
+                          });
+                        } else {
+                          setState(() {
+                            bottonColor = wrongAnswer;
+                          });
+                        }
+                      },
                 child: Container(
                   width: double.infinity,
                   height: 45,
                   decoration: BoxDecoration(
-                    color: isSelected
-                        ? isTrue
-                            ? AppColors.color['trueAnswerColor']
-                            : AppColors.color['falseAnswerColor']
-                        : AppColors.color['FourthColor'],
+                    color: isPressed
+                        ? QuestionsData
+                                .questions[widget.questionIndex].answer.entries
+                                .toList()[i]
+                                .value
+                            ? trueAnswer
+                            : wrongAnswer
+                        : bottonColor,
                     borderRadius: BorderRadius.circular(8.sp),
                   ),
                   alignment: Alignment.center,
@@ -99,41 +118,46 @@ class _QuestionContainerState extends State<QuestionContainer> {
                 ),
               ),
             ),
-          SizedBox(
-            height: 2.h,
-          ),
-          TextButton(
-            onPressed: () {
-              widget.controller.nextPage(
-                duration: const Duration(milliseconds: 100),
-                curve: Curves.linear,
-              );
-            },
-            child: Text(
-              'Next Question',
-              style: TextStyle(
-                color: AppColors.color['fourthColor'],
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+          const Spacer(),
+          if (widget.questionIndex + 1 == QuestionsData.questions.length)
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(
+                  context,
+                  ResultPage.routeName,
+                );
+              },
+              child: Text(
+                'Your Result',
+                style: TextStyle(
+                  color: AppColors.color['fourthColor'],
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
+          if (widget.questionIndex + 1 != QuestionsData.questions.length)
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  isPressed = false;
+                });
+                widget.controller.nextPage(
+                  duration: const Duration(milliseconds: 100),
+                  curve: Curves.linear,
+                );
+              },
+              child: Text(
+                'Next Question',
+                style: TextStyle(
+                  color: AppColors.color['fourthColor'],
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
         ],
       ),
     );
   }
 }
-
-// CustomButton(
-// onTap: () {
-// if (QuestionsData.questions[questionIndex].answer.entries
-//     .toList()[i]
-//     .value) {
-//
-// }
-// },
-// label: QuestionsData.questions[questionIndex].answer.keys
-//     .toList()[i],
-// color: AppColors.color['secondColor']!,
-// height: 45,
-// ),

@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
       backgroundColor: AppColors.color['firstColor'],
       appBar: AppBar(
         title: Text(
-          'Quiz App',
+          'Quiz',
           style: TextStyle(
             fontSize: 32.sp,
             fontWeight: FontWeight.bold,
@@ -34,6 +34,7 @@ class HomePage extends StatelessWidget {
       body: PageView.builder(
         controller: pageController,
         itemCount: QuestionsData.questions.length,
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           return QuestionContainer(
             questionsNumber: QuestionsData.questions.length,
